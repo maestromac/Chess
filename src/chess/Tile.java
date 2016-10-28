@@ -13,11 +13,11 @@ public abstract class Tile {
     
     int tileCoord;
     
-    Tile(int tileCoord){
+    Tile(int tileCoord) {
         this.tileCoord = tileCoord;
     }
     
-    public abstract boolean isTileOcupied();
+    public abstract boolean isTileOccupied();
     
     public abstract Piece getPiece();
     
@@ -44,7 +44,17 @@ public abstract class Tile {
         
         OccupiedTile(int tileCoord, Piece piece) {
             super(tileCoord);
-            this.pieceOnTile = pieceOnTile;
+            this.pieceOnTile = piece;
+        }
+        
+        @Override
+        public boolean isTileOccupied() {
+            return true;
+        }
+        
+        @Override
+        public Piece getPiece() {
+            return this.pieceOnTile;
         }
     }
     
