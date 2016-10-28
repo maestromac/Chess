@@ -3,7 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package chess;
+
+package com.chess.engine.board;
+
+import com.chess.engine.pieces.Piece;
+import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -11,9 +17,26 @@ package chess;
  */
 public abstract class Tile {
     
-    int tileCoord;
+    protected final int tileCoord;
     
-    Tile(int tileCoord) {
+    private static final Map<Integer, EmptyTile> EMPTY_TILES = createAllPossibleEmptyTiles();
+    
+    private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
+        
+        final Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
+        
+        for(int i = 0; i < 64; i++) {
+            emptyTileMap.put(i, new EmptyTile(i));
+        }
+        
+        return ImmutableMap.copyOf(emptyTileMap);
+    }
+    
+    public static Tile createTile(final int tileCoord, final Piece piece) {
+        return piece == null ? EMPTY_TILES.get(tileCoord) : new OccupiedTile(tileCoord, piece);
+    }
+    
+    private Tile(int tileCoord) {
         this.tileCoord = tileCoord;
     }
     
@@ -23,7 +46,7 @@ public abstract class Tile {
     
     public static final class EmptyTile extends Tile {
         
-        EmptyTile(int coord) {
+        EmptyTile(final int coord) {
             super(coord);
         }
         
@@ -40,7 +63,7 @@ public abstract class Tile {
     
     public static final class OccupiedTile extends Tile {
         
-        Piece pieceOnTile;
+        private final Piece pieceOnTile;
         
         OccupiedTile(int tileCoord, Piece piece) {
             super(tileCoord);
