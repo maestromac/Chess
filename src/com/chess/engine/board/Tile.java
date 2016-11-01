@@ -11,15 +11,11 @@ import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- * @author Mac
- */
 public abstract class Tile {
     
     protected final int tileCoord;
     
-    private static final Map<Integer, EmptyTile> EMPTY_TILES = createAllPossibleEmptyTiles();
+    private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
     
     private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
         
@@ -33,7 +29,7 @@ public abstract class Tile {
     }
     
     public static Tile createTile(final int tileCoord, final Piece piece) {
-        return piece == null ? EMPTY_TILES.get(tileCoord) : new OccupiedTile(tileCoord, piece);
+        return piece == null ? EMPTY_TILES_CACHE.get(tileCoord) : new OccupiedTile(tileCoord, piece);
     }
     
     private Tile(int tileCoord) {
@@ -46,7 +42,7 @@ public abstract class Tile {
     
     public static final class EmptyTile extends Tile {
         
-        EmptyTile(final int coord) {
+        private EmptyTile(final int coord) {
             super(coord);
         }
         
@@ -65,7 +61,7 @@ public abstract class Tile {
         
         private final Piece pieceOnTile;
         
-        OccupiedTile(int tileCoord, Piece piece) {
+        private OccupiedTile(int tileCoord, Piece piece) {
             super(tileCoord);
             this.pieceOnTile = piece;
         }
